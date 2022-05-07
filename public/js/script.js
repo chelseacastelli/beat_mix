@@ -34,37 +34,23 @@ const invert = drumPad => {
 
 
 const getNeighborPads = (x, y, size) => {
-    if ((x < 0 || x >= size) || (y < 0 || y >= size)) return [] 
+    const neighborPads = [];
 
-    let pairs = [];
-
-    const coords = {
-        "left": [x-1, y],
-        "right": [x+1, y],
-        "top": [x, y+1],
-        "below": [x, y-1]
+    if (x >= size || y >= size || x < 0 || y < 0 || size < 1) {
+      return neighborPads;
     }
 
-    if (x === 0){
-        if (y === 0) pairs.push(coords["top"], coords["right"]);
-        else if (y < size-1) pairs.push(coords["top"], coords["right"], coords["below"]);
-        else pairs.push(coords["right"], coords["below"]);
-    } else if (x === size-1) {
-        if (y === 0) pairs.push(coords["top"], coords["left"]);
-        else if (y < size-1) pairs.push(coords["top"], coords["left"], coords["below"]);
-        else pairs.push(coords["left"], coords["below"]);
-    } else if (y === 0) {
-        if (x === 0) pairs.push(coords["top"], coords["right"]);
-        else if (x < size-1) pairs.push(coords["left"], coords["top"], coords["right"]);
-        else pairs.push(coords["left"], coords["top"]);
-    } else if (y === size-1) {
-        if (x === 0) pairs.push(coords["below"], coords["right"]);
-        else if (x < size-1) pairs.push(coords["left"], coords["below"], coords["right"]);
-        else pairs.push(coords["left"], coords["below"]);
-    } else {
-        pairs.push(coords["left"], coords["below"], coords["right"], coords["top"]);
-    }
+    neighborPads.push([x - 1, y]);
+    neighborPads.push([x, y - 1]);
+    neighborPads.push([x + 1, y]);
+    neighborPads.push([x, y + 1]);
 
-    return pairs;
-}
+    return neighborPads.filter((neighbor) => {
+
+      return neighbor.every((val) => {
+        return val >= 0 && val < size;
+      });
+      
+    });
+  };
 
